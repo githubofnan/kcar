@@ -21,6 +21,7 @@ class DetailPageState extends State<DetailPage>{
     final Map<String, dynamic> message = {'message': params['serial'].substring(0, params['serial'].indexOf('#'))};
     return new Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.orange,
         title: new Text(params['serial']),
       ),
       body: FutureNetWeight(
