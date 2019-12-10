@@ -64,4 +64,10 @@ class NetUtils {
     var response = await _get(requestUrl, params: params);
     return CarInfo.fromJson(response.data['result']['body']);
   }
+  // 车辆报价
+  static Future<Map> getCarPrice(Map<String, dynamic> params) async {
+    String requestUrl = getRequestUrl('/api/tencent/carprice', params);
+    var response = await _get(requestUrl, params: params);
+    return response.data['result']['body'];
+  }
 }

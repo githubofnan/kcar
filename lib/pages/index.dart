@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:kcar/application.dart';
 import 'package:kcar/util/net_util.dart';
 import 'package:kcar/widgets/progress_widget.dart';
 import 'package:kcar/widgets/future_net_weight.dart';
@@ -82,7 +84,6 @@ class IndexPageView extends State<IndexPage>{
         lists.add(_resRowWidget(item));
       }
     }
-    print(data.toJson());
     return new Column(
       children: <Widget>[
         new LimitedBox(
@@ -100,16 +101,19 @@ class IndexPageView extends State<IndexPage>{
     );
   }
   Widget _resRowWidget(item) {
-    return new Column(
-      children: <Widget>[
-        new Row(
-          children: <Widget>[
-            _textTitle(item['brand']),
-            _textTitle(item['serial']),
-          ],
-        ),
-        new ProgressWidget(item['confidence'], 12.0, true, Color.fromARGB(20, 0, 0, 0), Colors.orange),
-      ],
+    return new GestureDetector(
+      onTap: () => tapRouter(item),
+      child: new Column(
+        children: <Widget>[
+          new Row(
+            children: <Widget>[
+              _textTitle(item['brand']),
+              _textTitle(item['serial']),
+            ],
+          ),
+          new ProgressWidget(item['confidence'], 12.0, true, Color.fromARGB(20, 0, 0, 0), Colors.orange),
+        ],
+      )
     );
   }
   Widget _textTitle(text){
@@ -122,5 +126,10 @@ class IndexPageView extends State<IndexPage>{
     return new Align(
       child: new Text(text, style: new TextStyle(fontSize: 16)),
     );
+  }
+
+  void tapRouter (Map<String, dynamic> item) {
+    item['carUrl'] = _image.path;
+    Application.router.navigateTo(context, "/detail?params=${Uri.encodeComponent(json.encode(item))}");
   }
 }
