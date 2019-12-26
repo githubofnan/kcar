@@ -30,6 +30,7 @@ class FutureNetWeight<T> extends StatefulWidget{
 
 class FutureNetWeightState extends State<FutureNetWeight>{
   Future _future;
+  var oldParams;
 
   @override
   void initState() {
@@ -43,15 +44,18 @@ class FutureNetWeightState extends State<FutureNetWeight>{
     setState(() {
       if(widget.params != null){
         _future = widget.futureFunc(widget.params);
+        oldParams = widget.params;
       }
     });
   }
 
   @override
   void didUpdateWidget(FutureNetWeight oldWidget) {
-    WidgetsBinding.instance.addPostFrameCallback((call) {
-      _request();
-    });
+    if(oldParams != widget.params || oldWidget.futureFunc != widget.futureFunc){
+      WidgetsBinding.instance.addPostFrameCallback((call) {
+        _request();
+      });
+    }
     super.didUpdateWidget(oldWidget);
   }
 

@@ -18,7 +18,6 @@ class IndexPageView extends State<IndexPage>{
   FormData _params;
   File _image;
 
-
   Future _tapPickerImage() async{
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     var copyName = image.path.substring(image.path.lastIndexOf('/')+1, image.path.lastIndexOf('.'))+'_less';

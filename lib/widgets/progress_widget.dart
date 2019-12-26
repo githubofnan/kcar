@@ -19,7 +19,31 @@ class ProgressWidget extends StatefulWidget{
   ProgressWidgetState createState() => new ProgressWidgetState();
 }
 
-class ProgressWidgetState extends State<ProgressWidget>{
+class ProgressWidgetState extends State<ProgressWidget> with TickerProviderStateMixin{
+
+  AnimationController animation;
+  Tween<double> tween;
+
+  void initState () {
+    animation = AnimationController(
+      duration: const Duration(milliseconds: 900),
+      vsync: this,
+    )..addListener((){setState((){});});
+
+    tween = Tween<double>(
+      begin: 0,
+      end: widget.value
+    );
+
+    animation.forward();
+    super.initState();
+  }
+
+  void dispose(){
+    animation.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context){
     return new SizedBox(
@@ -27,7 +51,7 @@ class ProgressWidgetState extends State<ProgressWidget>{
       child: new ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(widget.isRadius ? widget.height/2 : 0)),
         child: new LinearProgressIndicator(
-          value: widget.value,
+          value: tween.animate(animation).value,
           backgroundColor: widget.bgColor,
           valueColor: new AlwaysStoppedAnimation<Color>(widget.valueColor),
         ),
